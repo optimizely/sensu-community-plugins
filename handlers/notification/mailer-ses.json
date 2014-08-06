@@ -3,6 +3,11 @@
     "mail_from": "sensu@example.com",
     "mail_to": "monitor@example.com",
     "aws_access_key": "myawsaccesskey",
-    "aws_secret_key": "myawssecretkey"
+    "aws_secret_key": "myawssecretkey",
+    "server": "email.us-east-1.amazonaws.com",
+    "team_name1": {
+      "mail_from": "sensu_dev@example.com",
+      "mail_to": "monitor_dev@example.com"
+    }
   }
 }

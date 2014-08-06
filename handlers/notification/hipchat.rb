@@ -13,10 +13,14 @@ class HipChatNotif < Sensu::Handler
 
   def handle
     apiversion = settings["hipchat"]["apiversion"] || 'v1'
-    proxy_url = settings["hipchat"]["proxy_url"]
-    hipchatmsg = HipChat::Client.new(settings["hipchat"]["apikey"], :api_version => apiversion, :http_proxy => proxy_url)
-    room = settings["hipchat"]["room"]
-    from = settings["hipchat"]["from"] || 'Sensu'
+    hipchatmsg = HipChat::Client.new(settings["hipchat"]["apikey"], :api_version => apiversion)
+    if @event['check']['hipchat_team']
+      room = settings['hipchat'][@event['check']['hipchat_team']]['room']
+      from = settings['hipchat'][@event['check']['hipchat_team']]['from'] || 'Sensu'
+    else
+      room = settings["hipchat"]["room"]
+      from = settings["hipchat"]["from"] || 'Sensu'
+    end
 
     message = @event['check']['notification'] || @event['check']['output']
 
