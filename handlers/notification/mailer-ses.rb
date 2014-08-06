@@ -26,11 +26,20 @@ class Mailer < Sensu::Handler
   end
 
   def handle
+    if @event['check']['mail_team']
+      mail_to = settings['mailer-ses'][@event['check']['mail_team']]['mail_to']
+      mail_from = settings['mailer-ses'][@event['check']['mail_team']]['mail_from']
+    else
+      mail_to = settings['mailer-ses']['mail_to']
+      mail_from = settings['mailer-ses']['mail_from']
+    end
+
     params = {
-      :mail_to   => settings['mailer-ses']['mail_to'],
-      :mail_from => settings['mailer-ses']['mail_from'],
+      :mail_to   => mail_to,
+      :mail_from => mail_from,
       :aws_access_key => settings['mailer-ses']['aws_access_key'],
-      :aws_secret_key => settings['mailer-ses']['aws_secret_key']
+      :aws_secret_key => settings['mailer-ses']['aws_secret_key'],
+      :server => settings['mailer-ses']['server'] || 'email.us-east-1.amazonaws.com'
     }
 
     body = <<-BODY.gsub(/^ {14}/, '')
@@ -47,7 +56,8 @@ class Mailer < Sensu::Handler
 
     ses = AWS::SES::Base.new(
       :access_key_id     => params[:aws_access_key],
-      :secret_access_key => params[:aws_secret_key]
+      :secret_access_key => params[:aws_secret_key],
+      :server => params[:server]
     )
 
     begin

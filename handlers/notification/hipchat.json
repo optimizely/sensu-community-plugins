@@ -2,7 +2,12 @@
   "hipchat": {
     "apikey": "1234abcdefg1234abcdefg",
     "apiversion": "v1",
+    "proxy_url": "example.com",
     "room": "Ops",
-    "from": "Sensu"
+    "from": "Sensu",
+    "team_name1": {
+      "room": "Dev",
+      "from": "Sensu"
+    }
   }
 }
